@@ -1,0 +1,55 @@
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar          */
+div.tableContainer {
+    clear: both;
+    border: 1px solid #963;
+    height: 720px;
+    overflow: auto;
+    width: 900px;
+
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html > body div.tableContainer {
+    overflow: hidden;
+    width: 900px;
+
+
+}
+
+/* make the TH elements pretty */
+thead.fixedHeader th {
+    background: #C96;
+    border-left: 1px solid #EB8;
+    border-right: 1px solid #B74;
+    border-top: 1px solid #EB8;
+    font-weight: normal;
+    padding: 4px 3px;
+    text-align: left
+}
+
+html > body tbody.scrollContent {
+    display: block;
+    height: 650px;
+    overflow: auto;
+    width: 100%;
+}
+
+html > body thead.fixedHeader {
+    display: table;
+    overflow: auto;
+    width: 100%
+
+}
+
+/* make TD elements pretty. Provide alternating classes for striping the table */
+/* http://www.alistapart.com/articles/zebratables/                             */
+tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+    background: #FFF;
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid #CCC;
+    border-top: 1px solid #DDD;
+    padding: 2px 3px 3px 4px
+}
+
