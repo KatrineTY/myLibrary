@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page contentType="text/html;charset=utf-8" %>
 <html>
 <head>
     <link href="<c:url value="resources/css/table.css" />" rel="stylesheet">
@@ -12,10 +12,10 @@
     <form style="display: none">
         <fieldset>
             <legend>Genre</legend>
-            <c:forEach var="genre" items="${listOfGenres}">
+            <c:forEach var="genre" items="${sessionScope.listOfGenres}">
                 <div>
-                    <input type="checkbox" id="${genre}" name="genre" value="${genre}">
-                    <label for="${genre}">${genre}</label>
+                    <input type="checkbox" id="${genre.getId()}" name="genre" value="${genre.getGenreName()}">
+                    <label for="${genre.getId()}">${genre.getGenreName()}</label>
                 </div>
             </c:forEach>
         </fieldset>
@@ -56,8 +56,8 @@
                     <c:forEach var="listValue" items="${bookList}">
                         <tr>
                             <td width="25%">${listValue.bookName}</td>
-                            <td width="25%">${listValue.authorName}</td>
-                            <td width="15%">${listValue.genre}</td>
+                            <td width="25%">${listValue.author.authorName}</td>
+                            <td width="15%">${listValue.genre.genreName}</td>
                             <td width="5%">${listValue.value}</td>
                             <td width="5%">${listValue.deposit}</td>
                             <td width="5%">${listValue.count}</td>

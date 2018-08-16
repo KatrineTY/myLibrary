@@ -7,12 +7,8 @@
 
 <form action="deleteBook" method="post" >
     <label>
-        Book name:
-        <input type="text" name="bookName" value="bookName">
-    </label><br>
-    <label>
-        Author name:
-        <input type="text" name="authorName" value="authorName">
+        Book id:
+        <input type="text" name="bookId" value="bookId">
     </label><br>
     <input type="submit" value="Submit">
 </form>

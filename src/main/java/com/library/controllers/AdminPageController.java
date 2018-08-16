@@ -1,14 +1,15 @@
 package com.library.controllers;
 
 
-import com.library.models.Book;
+import com.library.dao.impl.SQLiteDAO;
+import com.library.dao.objects.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -21,11 +22,11 @@ public class AdminPageController {
     }
 
     //TODO: check that everything is not null
-    @RequestMapping(value = "/addBook", method = RequestMethod.POST)
-    public String addBook(Book book) {
-        BooksTableController.getBookList().add(book);
-        return "adminPage";
-    }
+//    @RequestMapping(value = "/addBook", method = RequestMethod.POST)
+//    public String addBook(Book book) {
+//        BooksTableController.getBookList().add(book);
+//        return "adminPage";
+//    }
 
     @RequestMapping(value = "deleteBookPage", method = RequestMethod.GET)
     public String getDeleteBook() {
@@ -33,15 +34,18 @@ public class AdminPageController {
     }
 
     @RequestMapping(value = "/deleteBook", method = RequestMethod.POST)
-    public String deleteBook(@ModelAttribute("bookName") String bookName) {
-        List<Book> bookList = BooksTableController.getBookList();
-        List<Book> toRemove = new ArrayList<>();
+    public String deleteBook(@ModelAttribute("bookId") int bookId,
+                             HttpSession session) {
+        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
+
+        List<Book> bookList = sqLiteDAO.getAllBooks();
         for (Book book:bookList){
-            if (book.getBookName().equals(bookName)){
-                toRemove.add(book);
+            if (book.getId() == bookId){
+                bookList.remove(book);
             }
         }
-        bookList.removeAll(toRemove);
+        sqLiteDAO.removeBookById(bookId);
+
         return "adminPage";
     }
 
