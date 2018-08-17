@@ -18,4 +18,6 @@ public interface LibraryDAO {
 
     void removeBookById(int bookId);
 
+    void addBook(String bookName, String authorName, String genreName, int value, int deposit, int count);
+
 }

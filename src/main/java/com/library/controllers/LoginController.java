@@ -1,7 +1,6 @@
 package com.library.controllers;
 
 import com.library.dao.impl.SQLiteDAO;
-import com.library.dao.objects.Genre;
 import com.library.models.Reader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @SessionAttributes("genres, reader")
@@ -30,8 +28,7 @@ public class LoginController {
         ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
         SQLiteDAO sqLiteDAO = (SQLiteDAO) context.getBean("sqliteDAO");
         session.setAttribute("sqliteDAO", sqLiteDAO);
-        List<Genre> genres = sqLiteDAO.getAllGenres();
-        session.setAttribute("listOfGenres", genres);
+
         return model;
     }
 

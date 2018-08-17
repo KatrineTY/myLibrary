@@ -10,8 +10,8 @@
             <td><form:input path="bookName" /></td>
         </tr>
         <tr>
-            <td><form:label path="authorName">authorName</form:label></td>
-            <td><form:input path="authorName" /></td>
+            <td><form:label path="author">author</form:label></td>
+            <td><form:input path="author" /></td>
         </tr>
         <tr>
             <td><form:label path="genre">genre</form:label></td>
@@ -28,10 +28,6 @@
         <tr>
             <td><form:label path="count">count</form:label></td>
             <td><form:input path="count" /></td>
-        </tr>
-        <tr>
-            <td><form:label path="id">id</form:label></td>
-            <td><form:input path="id" /></td>
         </tr>
         <tr>
             <td colspan="2">

@@ -3,6 +3,7 @@ package com.library.controllers;
 
 import com.library.dao.impl.SQLiteDAO;
 import com.library.dao.objects.Book;
+import com.library.dao.objects.Genre;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,11 +23,18 @@ public class AdminPageController {
     }
 
     //TODO: check that everything is not null
-//    @RequestMapping(value = "/addBook", method = RequestMethod.POST)
-//    public String addBook(Book book) {
-//        BooksTableController.getBookList().add(book);
-//        return "adminPage";
-//    }
+    @RequestMapping(value = "/addBook", method = RequestMethod.POST)
+    public String addBook(@ModelAttribute("bookName") String bookName,
+                          @ModelAttribute("author") String authorName,
+                          @ModelAttribute("genre") String genreName,
+                          @ModelAttribute("value") int value,
+                          @ModelAttribute("deposit") int deposit,
+                          @ModelAttribute("count") int count,
+                          HttpSession session) {
+        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
+        sqLiteDAO.addBook(bookName,authorName,genreName,value,deposit,count);
+        return "adminPage";
+    }
 
     @RequestMapping(value = "deleteBookPage", method = RequestMethod.GET)
     public String getDeleteBook() {
@@ -50,7 +58,12 @@ public class AdminPageController {
     }
 
     @RequestMapping(value = "/booksTable", method = RequestMethod.GET)
-    public String getTablePage(){
+    public String getTablePage(HttpSession session){
+        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
+
+        List<Genre> genres = sqLiteDAO.getAllGenres();
+        session.setAttribute("listOfGenres", genres);
+
         return "booksTable";
     }
 

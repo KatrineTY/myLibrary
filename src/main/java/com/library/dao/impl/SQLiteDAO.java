@@ -8,6 +8,8 @@ import com.library.dao.objects.Reader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -19,6 +21,8 @@ public class SQLiteDAO implements LibraryDAO {
     private static final String allBooksView = "all_books";
     private static final String booksTable = "books";
     private static final String genresTable = "genres";
+    private static final String readersTable = "readers";
+    private static final String authorsTable = "authors";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -74,16 +78,85 @@ public class SQLiteDAO implements LibraryDAO {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("count", count);
         params.addValue("bookId", bookId);
-        jdbcTemplate.update(sql,params);
-
+        jdbcTemplate.update(sql, params);
     }
 
     //TODO: why when I delete any of books, the note is present?
     @Override
     public void removeBookById(int bookId) {
-        String sql = "DELETE FROM books where id = :bookId";
+        String sql = "DELETE FROM " + booksTable + " where id = :bookId";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("bookId", bookId);
-        jdbcTemplate.update(sql,params);
+        jdbcTemplate.update(sql, params);
+    }
+
+    @Override
+    public void addBook(String bookName, String authorName, String genreName, int value, int deposit, int count) {
+        String sql = "SELECT count(*) FROM " + authorsTable + " WHERE author_name = ?;";
+        int authorId;
+        int genreId;
+        if (jdbcTemplate.getJdbcOperations()
+                .queryForObject(sql, new Object[]{authorName}, Integer.class) == 0) {
+            authorId = insertAuthor(authorName);
+        } else {
+            authorId =findAuthorId(authorName);
+        }
+
+        sql = "SELECT count(*) FROM " + genresTable + " WHERE genre_name = ?;";
+        if (jdbcTemplate.getJdbcOperations()
+                .queryForObject(sql, new Object[]{genreName}, Integer.class) == 0) {
+            genreId = insertGenre(genreName);
+        } else {
+            genreId = findGenreId(genreName);
+        }
+
+        insertBook(bookName, authorId, genreId, value, deposit, count);
+    }
+
+    private void insertBook(String bookName, int authorId, int genreId, int value, int deposit, int count) {
+        String sql = "INSERT into " + booksTable + " (book_name, author_id,genre_id,value,deposit,count) " +
+                "VALUES (:bookName, :authorId, :genreId, :value, :deposit, :count)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("bookName", bookName);
+        params.addValue("authorId", authorId);
+        params.addValue("genreId", genreId);
+        params.addValue("value", value);
+        params.addValue("deposit", deposit);
+        params.addValue("count", count);
+
+        jdbcTemplate.update(sql, params);
+
+    }
+
+    private int insertAuthor(String authorName) {
+        String sql = "INSERT into " + authorsTable + " (author_name) VALUES (:authorName)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("authorName", authorName);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, params, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+    private int insertGenre(String genreName) {
+        String sql = "INSERT into " + genresTable + " (genre_name) VALUES (:genreName)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("genreName", genreName);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, params, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+    private int findAuthorId(String authorName) {
+        String sql = "SELECT id FROM " + authorsTable + " WHERE author_name = ?;";
+        return jdbcTemplate.getJdbcOperations().queryForObject(sql, new Object[]{authorName}, Integer.class);
+    }
+
+    private int findGenreId(String genreName) {
+        String sql = "SELECT id FROM " + genresTable + " WHERE genre_name = ?;";
+        return jdbcTemplate.getJdbcOperations().queryForObject(sql, new Object[]{genreName}, Integer.class);
     }
 }
