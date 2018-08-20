@@ -9,18 +9,17 @@
 <html>
 <body>
 
-<form:form method="POST" modelAttribute="reader" action="check-reader">
+<form method="POST" action="check-reader">
 
-    <form:label path="readerName"/>
-    <form:input path="readerName"/>
-
-    <form:label path="password"/>
-    <form:password path="password"/>
-
+    <label>
+        <input type="text" value="Reader Name" name="readerName"/>
+    </label>
+    <label>
+        <input type="password" value="password" name="password"/>
+    </label>
     <input type="submit" value="Log in">]
 
-
-</form:form>
+</form>
 
 </body>
 </html>

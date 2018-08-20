@@ -2,7 +2,6 @@ package com.library.dao.interfaces;
 
 import com.library.dao.objects.Book;
 import com.library.dao.objects.Genre;
-import com.library.dao.objects.Reader;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface LibraryDAO {
 
     List<Genre> getAllGenres();
 
-    List<Reader> getAllReaders();
+    List<String> getAllReadersNames();
 
     void changeCountOfBook(int bookId, int count);
 
@@ -20,4 +19,7 @@ public interface LibraryDAO {
 
     void addBook(String bookName, String authorName, String genreName, int value, int deposit, int count);
 
+    void addReader(String readerName, String readerPhone);
+
+    List<Book> getBookListForReader(String readerName);
 }

@@ -4,7 +4,6 @@ import com.library.dao.interfaces.LibraryDAO;
 import com.library.dao.objects.Author;
 import com.library.dao.objects.Book;
 import com.library.dao.objects.Genre;
-import com.library.dao.objects.Reader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -58,7 +57,7 @@ public class SQLiteDAO implements LibraryDAO {
 
     @Override
     public List<Genre> getAllGenres() {
-        String sql = "select * from " + genresTable;
+        String sql = "SELECT * FROM " + genresTable;
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Genre genre = new Genre();
             genre.setId(resultSet.getInt("id"));
@@ -68,8 +67,12 @@ public class SQLiteDAO implements LibraryDAO {
     }
 
     @Override
-    public List<Reader> getAllReaders() {
-        return null;
+    public List<String> getAllReadersNames() {
+        String sql = "SELECT * FROM " + readersTable;
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return resultSet.getString("reader_name");
+        });
     }
 
     @Override
@@ -99,7 +102,7 @@ public class SQLiteDAO implements LibraryDAO {
                 .queryForObject(sql, new Object[]{authorName}, Integer.class) == 0) {
             authorId = insertAuthor(authorName);
         } else {
-            authorId =findAuthorId(authorName);
+            authorId = findAuthorId(authorName);
         }
 
         sql = "SELECT count(*) FROM " + genresTable + " WHERE genre_name = ?;";
@@ -111,6 +114,21 @@ public class SQLiteDAO implements LibraryDAO {
         }
 
         insertBook(bookName, authorId, genreId, value, deposit, count);
+    }
+
+    @Override
+    public void addReader(String readerName, String readerPhone) {
+        String sql = "INSERT into " + readersTable + " (reader_name, phone) VALUES (:readerName, :readerPhone)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("readerName", readerName);
+        params.addValue("readerPhone", readerPhone);
+
+        jdbcTemplate.update(sql, params);
+    }
+
+    @Override
+    public List<Book> getBookListForReader(String readerName) {
+        return null;
     }
 
     private void insertBook(String bookName, int authorId, int genreId, int value, int deposit, int count) {
