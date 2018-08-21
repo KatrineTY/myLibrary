@@ -3,11 +3,12 @@
 <html>
 <body>
 
-<a href="adminPage.jsp">Admin page</a>
+<a href="adminPage">Admin page</a>
+<br/>
+<a href="bookStorage">Go to book storage</a>
+<br/>
 
-<tr></tr>
-
-<table>
+<table border="1">
     <tr>
         <th>Book name</th>
         <th>Author name</th>
@@ -16,7 +17,7 @@
         <th>Deposit</th>
     </tr>
 
-    < test="${not empty bookList}">
+    <c:if test="${not empty bookList}">
     <c:forEach var="listValue" items="${bookList}">
     <tr>
         <td>${listValue.bookName}</td>
@@ -26,6 +27,7 @@
         <td>${listValue.deposit}</td>
     </tr>
     </c:forEach>
+    </c:if>
 </table>>
 
 </body>

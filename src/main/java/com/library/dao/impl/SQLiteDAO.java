@@ -5,6 +5,7 @@ import com.library.dao.objects.Author;
 import com.library.dao.objects.Book;
 import com.library.dao.objects.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,12 +13,16 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Component("sqliteDAO")
 public class SQLiteDAO implements LibraryDAO {
 
     private static final String allBooksView = "all_books";
+    private static final String allNotesView = "all_notes";
+
     private static final String booksTable = "books";
     private static final String genresTable = "genres";
     private static final String readersTable = "readers";
@@ -34,25 +39,7 @@ public class SQLiteDAO implements LibraryDAO {
     @Override
     public List<Book> getAllBooks() {
         String sql = "select * from " + allBooksView;
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            Author author = new Author();
-            author.setId(resultSet.getInt("author_id"));
-            author.setAuthorName(resultSet.getString("author_name"));
-
-            Genre genre = new Genre();
-            genre.setId(resultSet.getInt("genre_id"));
-            genre.setGenreName(resultSet.getString("genre_name"));
-
-            Book book = new Book();
-            book.setGenre(genre);
-            book.setAuthor(author);
-            book.setId(resultSet.getInt("book_id"));
-            book.setCount(resultSet.getInt("count"));
-            book.setBookName(resultSet.getString("book_name"));
-            book.setDeposit(resultSet.getInt("deposit"));
-            book.setValue(resultSet.getInt("value"));
-            return book;
-        });
+        return jdbcTemplate.query(sql, new BookRowMapper());
     }
 
     @Override
@@ -70,9 +57,7 @@ public class SQLiteDAO implements LibraryDAO {
     public List<String> getAllReadersNames() {
         String sql = "SELECT * FROM " + readersTable;
 
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            return resultSet.getString("reader_name");
-        });
+        return jdbcTemplate.query(sql, (resultSet, i) -> resultSet.getString("reader_name"));
     }
 
     @Override
@@ -128,7 +113,11 @@ public class SQLiteDAO implements LibraryDAO {
 
     @Override
     public List<Book> getBookListForReader(String readerName) {
-        return null;
+        String sql = "SELECT * FROM " +allNotesView + " WHERE reader_name=:readerName";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("readerName",readerName);
+
+        return jdbcTemplate.query(sql,params,new BookRowMapper());
     }
 
     private void insertBook(String bookName, int authorId, int genreId, int value, int deposit, int count) {
@@ -176,5 +165,30 @@ public class SQLiteDAO implements LibraryDAO {
     private int findGenreId(String genreName) {
         String sql = "SELECT id FROM " + genresTable + " WHERE genre_name = ?;";
         return jdbcTemplate.getJdbcOperations().queryForObject(sql, new Object[]{genreName}, Integer.class);
+    }
+
+    private static final class BookRowMapper implements RowMapper<Book> {
+
+        @Override
+        public Book mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            Author author = new Author();
+            author.setId(resultSet.getInt("author_id"));
+            author.setAuthorName(resultSet.getString("author_name"));
+
+            Genre genre = new Genre();
+            genre.setId(resultSet.getInt("genre_id"));
+            genre.setGenreName(resultSet.getString("genre_name"));
+
+            Book book = new Book();
+            book.setGenre(genre);
+            book.setAuthor(author);
+            book.setId(resultSet.getInt("book_id"));
+            book.setCount(resultSet.getInt("count"));
+            book.setBookName(resultSet.getString("book_name"));
+            book.setDeposit(resultSet.getInt("deposit"));
+            book.setValue(resultSet.getInt("value"));
+            return book;
+        }
+
     }
 }
