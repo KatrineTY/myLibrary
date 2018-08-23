@@ -1,7 +1,8 @@
 package com.library.controllers;
 
-import com.library.dao.impl.SQLiteDAO;
+import com.library.dao.impls.SQLiteDAO;
 import com.library.dao.objects.Book;
+import com.library.dao.objects.Genre;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,8 @@ public class LoginAndSignUpController {
         ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
         SQLiteDAO sqLiteDAO = (SQLiteDAO) context.getBean("sqliteDAO");
         session.setAttribute("sqliteDAO", sqLiteDAO);
-
+        List<Genre> genres = sqLiteDAO.getAllGenres();
+        session.setAttribute("listOfGenres", genres);
         return model;
     }
 
