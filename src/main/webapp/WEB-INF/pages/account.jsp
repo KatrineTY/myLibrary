@@ -1,14 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;" %>
 <html>
 <body>
 
+
+<div align="center">
 <a href="adminPage">Admin page</a>
 <br/>
 <a href="bookStorage">Go to book storage</a>
 <br/>
 
-<table border="1">
+<table border="1" >
     <tr>
         <th>Book name</th>
         <th>Author name</th>
@@ -29,6 +31,6 @@
     </c:forEach>
     </c:if>
 </table>>
-
+</div>
 </body>
 </html>

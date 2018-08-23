@@ -1,7 +1,7 @@
 package com.library.controllers;
 
 
-import com.library.dao.impl.SQLiteDAO;
+import com.library.dao.impls.SQLiteDAO;
 import com.library.dao.objects.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,8 @@ public class BooksTableController {
         if (genres == null) {
             model.addObject("bookList", bookList);
         } else {
-            genres = genres.stream().map(this::returnUTF8Str).collect(Collectors.toList());
-            List<String> finalGenres = genres;
-            model.addObject("bookList", bookList.stream().filter(book -> finalGenres.contains(book.getGenre().getGenreName())).collect(Collectors.toList()));
+
+            model.addObject("bookList", bookList.stream().filter(book -> genres.contains(book.getGenre().getGenreName())).collect(Collectors.toList()));
         }
         return model;
     }

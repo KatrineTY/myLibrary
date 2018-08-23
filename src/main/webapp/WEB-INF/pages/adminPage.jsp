@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;" %>
 <html>
 <head>
 
@@ -6,7 +6,7 @@
 <body>
 
 <%--<c:if test="isAdmin">--%>
-
+<div align="center">
 <form action="addBookPage" method="get">
     <button type="submit">Add book</button>
 </form>
@@ -14,7 +14,7 @@
 <button type="submit">Delete book</button>
 </form>
 <a href="booksTable">Go to table</a>
-
+</div>
 <%--</c:if>--%>
 </body>
 </html>

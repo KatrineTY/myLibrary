@@ -1,4 +1,4 @@
-package com.library.dao.impl;
+package com.library.dao.impls;
 
 import com.library.dao.interfaces.LibraryDAO;
 import com.library.dao.objects.Author;
@@ -78,6 +78,7 @@ public class SQLiteDAO implements LibraryDAO {
         jdbcTemplate.update(sql, params);
     }
 
+    //TODO Transaction
     @Override
     public void addBook(String bookName, String authorName, String genreName, int value, int deposit, int count) {
         String sql = "SELECT count(*) FROM " + authorsTable + " WHERE author_name = ?;";

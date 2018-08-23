@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html;"
          pageEncoding="UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -9,7 +9,7 @@
 <html>
 <body>
 
-<form method="POST" action="check-reader">
+<form method="POST" action="check-reader" style="text-align: center;">
 
     <label>
         <input type="text" value="Reader Name" name="readerName"/>

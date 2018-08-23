@@ -1,6 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <body>
+<div align="center">
 
 <h2>Enter book information</h2>
 <form:form method="post" action="addBook">
@@ -36,5 +37,6 @@
         </tr>
     </table>
 </form:form>
+</div>
 </body>
 </html>

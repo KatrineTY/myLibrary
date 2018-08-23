@@ -1,9 +1,8 @@
 package com.library.controllers;
 
 
-import com.library.dao.impl.SQLiteDAO;
+import com.library.dao.impls.SQLiteDAO;
 import com.library.dao.objects.Book;
-import com.library.dao.objects.Genre;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,11 +58,6 @@ public class AdminPageController {
 
     @RequestMapping(value = "/booksTable", method = RequestMethod.GET)
     public String getTablePage(HttpSession session){
-        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
-
-        List<Genre> genres = sqLiteDAO.getAllGenres();
-        session.setAttribute("listOfGenres", genres);
-
         return "booksTable";
     }
 
