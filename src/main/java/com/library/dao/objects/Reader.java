@@ -1,9 +1,16 @@
 package com.library.dao.objects;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Reader {
     private int id;
+    @NotNull(message = "Непустое поле!")
+    @Size(min=4,max=16, message="Длина логина должна быть от 4 до 16 символов")
     private String readerName;
-    private String phone;
+    @NotNull(message = "Непустое поле!")
+    @Size(min=6,max=16, message="Длина пароля должна быть от 6 до 16 символов")
+    private String password;
 
     public int getId() {
         return id;
@@ -21,11 +28,11 @@ public class Reader {
         this.readerName = readerName;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

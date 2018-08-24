@@ -9,17 +9,22 @@
 <html>
 <body>
 
-<form method="POST" action="check-reader" style="text-align: center;">
+<form:form method="POST" modelAttribute="reader" action="check-reader" style="text-align: center;">
 
-    <label>
-        <input type="text" value="Reader Name" name="readerName"/>
-    </label>
-    <label>
-        <input type="password" value="password" name="password"/>
-    </label>
+    <form:label path="readerName">
+        <form:input path="readerName" type="text" value="Reader Name" name="readerName"/>
+        <form:errors path="readerName"/>
+    </form:label>
+    <br/>
+    <form:label path="password">
+        <form:input path="password" type="password" value="password" name="password"/>
+        <form:errors path="password"/>
+    </form:label>
+    <br>
+
     <input type="submit" value="Log in">]
 
-</form>
+</form:form>
 
 </body>
 </html>

@@ -1,12 +1,24 @@
 package com.library.dao.objects;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class Book {
     private int id;
+    @NotNull(message = "Непустое поле!")
+    @Pattern(regexp = "[a-zA-Z]+[\\s[a-zA-Z]+]*" , message = "Должны быть только буквы")
     private String bookName;
+    @NotNull
     private Author author;
+    @NotNull
     private Genre genre;
+
+    @Min(value = 0,message = "Только положительные числа")
     private int value;
+    @Min(value = 0,message = "Только положительные числа")
     private int deposit;
+    @Min(value = 0,message = "Только положительные числа")
     private int count;
 
     public int getId() {
