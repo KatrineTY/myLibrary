@@ -23,7 +23,7 @@ import java.util.List;
 public class LoginAndSignUpController {
 
     @ModelAttribute
-    public Reader createReader(){
+    public Reader createReader() {
         return new Reader();
     }
 
@@ -40,7 +40,7 @@ public class LoginAndSignUpController {
         session.setAttribute("sqliteDAO", sqLiteDAO);
         List<Genre> genres = sqLiteDAO.getAllGenres();
         session.setAttribute("listOfGenres", genres);
-        model.addObject("reader",createReader());
+        model.addObject("reader", createReader());
         return model;
     }
 
@@ -52,34 +52,37 @@ public class LoginAndSignUpController {
 
         ModelAndView model = new ModelAndView();
 
-        if(!bindingResult.hasErrors() && sqLiteDAO.getAllReadersNames().contains(reader.getReaderName())){
+        if (!bindingResult.hasErrors() && sqLiteDAO.getAllReadersNames().contains(reader.getReaderName())) {
             model.setViewName("redirect:account");
             session.setAttribute("readerName", reader.getReaderName());
             List<Book> bookList = sqLiteDAO.getBookListForReader(reader.getReaderName());
-            model.addObject("bookList",bookList);
-        } else{
+            model.addObject("bookList", bookList);
+        } else {
             model.setViewName("loginPage");
         }
         return model;
     }
 
-    @RequestMapping(value = "account",method = RequestMethod.GET)
-    private String getAccountPage(){
+    @RequestMapping(value = "account", method = RequestMethod.GET)
+    private String getAccountPage() {
         return "account";
     }
 
     @RequestMapping(value = "signup", method = RequestMethod.GET)
-    public String registerNewReader(){
+    public String registerNewReader(HttpSession session) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        SQLiteDAO sqLiteDAO = (SQLiteDAO) context.getBean("sqliteDAO");
+        session.setAttribute("sqliteDAO", sqLiteDAO);
         return "signupPage";
     }
 
     @RequestMapping(value = "register-new-reader", method = RequestMethod.POST)
     public String register(@Valid @ModelAttribute("readerName") String readerName,
-                                 @Valid @ModelAttribute("readerPhone") String readerPhone,
-                                 HttpSession session){
+                           @Valid @ModelAttribute("readerPhone") String readerPhone,
+                           HttpSession session) {
         SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
 
-        sqLiteDAO.addReader(readerName,readerPhone);
+        sqLiteDAO.addReader(readerName, readerPhone);
 
         return "startPage";
     }
