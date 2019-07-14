@@ -13,7 +13,7 @@ public interface LibraryDAO {
 
     List<String> getAllReadersNames();
 
-    void changeCountOfBook(int bookId, int count);
+    void updateBook(Book book);
 
     void removeBookById(int bookId);
 

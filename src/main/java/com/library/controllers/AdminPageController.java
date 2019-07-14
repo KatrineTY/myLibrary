@@ -1,7 +1,7 @@
 package com.library.controllers;
 
 
-import com.library.dao.impls.SQLiteDAO;
+import com.library.dao.interfaces.LibraryDAO;
 import com.library.dao.objects.Book;
 import com.library.dao.objects.Genre;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,12 @@ import java.util.List;
 
 @Controller
 public class AdminPageController {
+
+    private final LibraryDAO libraryDAO;
+
+    public AdminPageController(LibraryDAO libraryDAO) {
+        this.libraryDAO = libraryDAO;
+    }
 
     @ModelAttribute
     public Book createNewBook(){
@@ -37,11 +43,10 @@ public class AdminPageController {
         if(bindingResult.hasErrors()){
             model.setViewName("addBook");
         } else{
-            SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
-            sqLiteDAO.addBook(book.getBookName(),book.getAuthor().getAuthorName(),
+            libraryDAO.addBook(book.getBookName(), book.getAuthor().getAuthorName(),
                     book.getGenre().getGenreName(),book.getValue(),book.getDeposit(),book.getCount());
 
-            List<Genre> genres = sqLiteDAO.getAllGenres();
+            List<Genre> genres = libraryDAO.getAllGenres();
             session.setAttribute("listOfGenres", genres);
             model.setViewName("redirect:/adminPage");
         }
@@ -56,15 +61,13 @@ public class AdminPageController {
     @RequestMapping(value = "/deleteBook", method = RequestMethod.POST)
     public String deleteBook(@ModelAttribute("bookId") int bookId,
                              HttpSession session) {
-        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
-
-        List<Book> bookList = sqLiteDAO.getAllBooks();
+        List<Book> bookList = libraryDAO.getAllBooks();
         for (Book book:bookList){
             if (book.getId() == bookId){
                 bookList.remove(book);
             }
         }
-        sqLiteDAO.removeBookById(bookId);
+        libraryDAO.removeBookById(bookId);
 
         return "adminPage";
     }

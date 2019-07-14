@@ -10,14 +10,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component("sqliteDAO")
+//@Component("sqliteDAO")
 public class SQLiteDAO implements LibraryDAO {
 
     private static final String allBooksView = "all_books";
@@ -61,11 +60,11 @@ public class SQLiteDAO implements LibraryDAO {
     }
 
     @Override
-    public void changeCountOfBook(int bookId, int count) {
+    public void updateBook(Book book) {
         String sql = "UPDATE " + booksTable + " SET count = :count WHERE id = :bookId";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("count", count);
-        params.addValue("bookId", bookId);
+        params.addValue("count", book.getCount());
+        params.addValue("bookId", book.getId());
         jdbcTemplate.update(sql, params);
     }
 

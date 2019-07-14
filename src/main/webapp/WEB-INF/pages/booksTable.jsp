@@ -47,8 +47,6 @@
     </style>
 </head>
 <body>
-<%--<form style="display: inline-block;  margin-left: 20%;" action="getCheckBoxResult" method="post">--%>
-<%--    <form style="display: none">--%>
 <div class="filters">
     <div class="search">
         <input type="text" id="inputBook" onkeyup="findBooksName()" placeholder="Search for names..">
@@ -57,18 +55,18 @@
         <input type="text" id="inputAuthor" onkeyup="author()" placeholder="Search for authors..">
     </div>
     <br/>
-        <fieldset>
-            <legend>Genres</legend>
-            <c:forEach var="genre" items="${sessionScope.listOfGenres}">
-                <div>
-                    <label>
-                        <input type="checkbox" onclick="filterBooks()" id="${genre.getId()}" name="genre"
-                               value="${genre.getGenreName()}">
-                            ${genre.getGenreName()}
-                    </label>
-                </div>
-            </c:forEach>
-        </fieldset>
+    <fieldset>
+        <legend>Genres</legend>
+        <c:forEach var="genre" items="${sessionScope.listOfGenres}">
+            <div>
+                <label>
+                    <input type="checkbox" onclick="filterBooks()" id="${genre.getId()}" name="genre"
+                           value="${genre.getGenreName()}">
+                        ${genre.getGenreName()}
+                </label>
+            </div>
+        </c:forEach>
+    </fieldset>
 </div>
 
 <form action="changeCountOfBook" method="post">

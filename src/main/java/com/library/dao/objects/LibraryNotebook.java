@@ -1,11 +1,27 @@
 package com.library.dao.objects;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 public class LibraryNotebook {
+    @Id
+    @Column
     private int id;
+    @ManyToOne
+    @JoinColumn(name = "reader_id")
     private Reader reader;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
+    @Column(name = "date_taken")
     private String dateTaken;
+    @Column(name = "date_return")
     private String dateReturn;
+
+    public LibraryNotebook() {
+    }
 
     public int getId() {
         return id;

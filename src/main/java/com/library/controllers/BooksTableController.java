@@ -1,7 +1,8 @@
 package com.library.controllers;
 
-import com.library.dao.impls.SQLiteDAO;
+import com.library.dao.interfaces.LibraryDAO;
 import com.library.dao.objects.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +16,13 @@ import java.util.stream.Collectors;
 @Controller
 public class BooksTableController {
 
+    @Autowired
+    LibraryDAO libraryDAO;
+
     @RequestMapping(value = "/getCheckBoxResult", method = RequestMethod.POST)
     public ModelAndView getCheckBoxResult(@RequestParam(value = "genre", required = false) List<String> genres,
                                           HttpSession session) {
-        List<Book> bookList = ((SQLiteDAO) session.getAttribute("sqliteDAO")).getAllBooks();
+        List<Book> bookList = libraryDAO.getAllBooks();
 
         ModelAndView model = new ModelAndView("booksTable");
         if (genres == null) {
@@ -32,14 +36,14 @@ public class BooksTableController {
     @RequestMapping(value = "/changeCountOfBook", method = RequestMethod.POST)
     public ModelAndView changeCountOfBook(@RequestParam(value = "bookId", required = false) List<Integer> booksId,
                                           HttpSession session) {
-        SQLiteDAO sqLiteDAO = (SQLiteDAO) session.getAttribute("sqliteDAO");
-        List<Book> bookList = sqLiteDAO.getAllBooks();
+        List<Book> bookList = libraryDAO.getAllBooks();
         ModelAndView model = new ModelAndView("booksTable");
         if (booksId != null) {
             for (Book book : bookList) {
                 if (booksId.contains(book.getId())) {
-                    sqLiteDAO.changeCountOfBook(book.getId(), book.getCount() - 1);
                     book.setCount(book.getCount() - 1);
+                    libraryDAO.updateBook(book);
+
                 }
             }
         }
